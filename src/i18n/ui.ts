@@ -111,7 +111,7 @@ const en: Ui = {
     },
     {
       title: 'Developer Experience',
-      body: 'A "Docs as Code" discipline: clear architectural guidelines, comprehensive documentation, and strict quality standards that drastically accelerate onboarding.',
+      body: 'A Docs as Code discipline: clear architectural guidelines, comprehensive documentation, and strict quality standards that drastically accelerate onboarding.',
     },
     {
       title: 'Quality Engineering',
@@ -214,7 +214,7 @@ const es: Ui = {
     },
     {
       title: 'Experiencia de Desarrollo',
-      body: 'Una disciplina de "Docs as Code": lineamientos arquitectónicos claros, documentación exhaustiva y estándares estrictos de calidad que aceleran drásticamente el onboarding.',
+      body: 'Una disciplina de Docs as Code: lineamientos arquitectónicos claros, documentación exhaustiva y estándares estrictos de calidad que aceleran drásticamente el onboarding.',
     },
     {
       title: 'Ingeniería de Calidad',
