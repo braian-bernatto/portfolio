@@ -111,7 +111,7 @@ const en: Ui = {
     },
     {
       title: 'Developer Experience',
-      body: 'A Docs as Code discipline: clear architectural guidelines, comprehensive documentation, and strict quality standards that drastically accelerate onboarding.',
+      body: 'Living in-repo documentation: a curated README paired with auto-generated TSDoc component reference, so the codebase stays self-documenting and onboarding is self-serve.',
     },
     {
       title: 'Quality Engineering',
@@ -214,7 +214,7 @@ const es: Ui = {
     },
     {
       title: 'Experiencia de Desarrollo',
-      body: 'Una disciplina de Docs as Code: lineamientos arquitectónicos claros, documentación exhaustiva y estándares estrictos de calidad que aceleran drásticamente el onboarding.',
+      body: 'Documentación viva en el repo: un README curado junto con una referencia de componentes auto-generada con TSDoc, para que el codebase se autodocumente y el onboarding sea autogestionable.',
     },
     {
       title: 'Ingeniería de Calidad',
