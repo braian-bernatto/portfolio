@@ -1,22 +1,34 @@
 ---
 import '../styles/global.css';
-import { profile } from '../data/portfolio';
+import { getPortfolio } from '../data/portfolio';
+import { defaultLocale } from '../i18n/config';
+import type { Locale } from '../i18n/config';
 
 interface Props {
+  locale?: Locale;
   title?: string;
   description?: string;
 }
 
+const locale = Astro.props.locale ?? defaultLocale;
+const { profile } = getPortfolio(locale);
 const {
   title = `${profile.name} — ${profile.role}`,
   description = profile.summary,
 } = Astro.props;
 
-const canonical = new URL(Astro.url.pathname, Astro.site).toString();
+const site = Astro.site ?? new URL('http://localhost:4321');
+const rawPath = Astro.url.pathname.replace(/\/+$/, '') || '/';
+const isEs = rawPath === '/es' || rawPath.startsWith('/es/');
+const enPath = isEs ? rawPath.replace(/^\/es/, '') || '/' : rawPath;
+const esPath = isEs ? rawPath : `/es${rawPath === '/' ? '' : rawPath}`;
+const enUrl = new URL(enPath === '/' ? '/' : enPath, site).href;
+const esUrl = new URL(esPath === '/' ? '/' : esPath, site).href;
+const canonical = locale === 'es' ? esUrl : enUrl;
 ---
 
 <!doctype html>
-<html lang="en">
+<html lang={locale}>
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
@@ -28,17 +40,22 @@ const canonical = new URL(Astro.url.pathname, Astro.site).toString();
     <meta name="theme-color" content="#090b0f" />
     <link rel="canonical" href={canonical} />
 
+    <link rel="alternate" hreflang="en" href={enUrl} />
+    <link rel="alternate" hreflang="es" href={esUrl} />
+    <link rel="alternate" hreflang="x-default" href={enUrl} />
+
     <meta property="og:type" content="website" />
     <meta property="og:title" content={title} />
     <meta property="og:description" content={description} />
     <meta property="og:url" content={canonical} />
+    <meta property="og:locale" content={locale === 'es' ? 'es' : 'en_US'} />
+    <meta property="og:locale:alternate" content={locale === 'es' ? 'en_US' : 'es'} />
     <meta name="twitter:card" content="summary_large_image" />
     <meta name="twitter:title" content={title} />
     <meta name="twitter:description" content={description} />
 
     <link rel="icon" href="/favicon.svg" type="image/svg+xml" />
     <link rel="icon" href="/favicon.ico" sizes="any" />
-    <link rel="apple-touch-icon" href="/favicon.svg" />
 
     <link rel="preconnect" href="https://fonts.googleapis.com" />
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
@@ -48,7 +65,11 @@ const canonical = new URL(Astro.url.pathname, Astro.site).toString();
     />
   </head>
   <body>
-    <a href="#main" class="sr-only focus:not-sr-only focus:fixed focus:left-4 focus:top-4 focus:z-[100] focus:rounded-lg focus:bg-surface focus:px-4 focus:py-2 focus:text-ink">
+    <div id="top" aria-hidden="true" class="h-0 w-0"></div>
+    <a
+      href="#main"
+      class="sr-only focus:not-sr-only focus:fixed focus:left-4 focus:top-4 focus:z-[100] focus:rounded-lg focus:bg-surface focus:px-4 focus:py-2 focus:text-ink"
+    >
       Skip to content
     </a>
     <slot />
@@ -82,7 +103,7 @@ const canonical = new URL(Astro.url.pathname, Astro.site).toString();
         (entries) => {
           entries.forEach((entry) => {
             if (entry.isIntersecting) {
-              navLinks.forEach((a) => a.dataset.active = 'false');
+              navLinks.forEach((a) => (a.dataset.active = 'false'));
               const active = navLinks.get(entry.target.id);
               if (active) active.dataset.active = 'true';
             }

@@ -1,16 +1,22 @@
 ---
-import { skillGroups } from '../data/portfolio';
+import { getPortfolio } from '../data/portfolio';
+import { getUi } from '../i18n/ui';
+import type { Locale } from '../i18n/config';
 import { Icon } from 'astro-icon/components';
 import SectionHeading from './SectionHeading.astro';
+
+interface Props {
+  locale: Locale;
+}
+const { locale } = Astro.props;
+const { skillGroups } = getPortfolio(locale);
+const t = getUi(locale);
+const s = t.sections.skills;
 ---
 
 <section id="skills" class="scroll-mt-24 py-20 sm:py-28">
   <div class="u-container">
-    <SectionHeading
-      eyebrow="Skills"
-      title="The toolkit behind the work."
-      description="A senior-frontend stack centered on the modern React ecosystem, with tooling, observability, and docs to keep teams moving."
-    />
+    <SectionHeading eyebrow={s.eyebrow} title={s.title} description={s.description} />
 
     <div class="grid gap-4 sm:grid-cols-2 lg:grid-cols-4">
       {
@@ -28,10 +34,10 @@ import SectionHeading from './SectionHeading.astro';
               </h3>
             </div>
             <ul class="flex flex-wrap gap-1.5">
-              {group.skills.map((s) => (
+              {group.skills.map((sk) => (
                 <li class="chip">
-                  {s.icon && <Icon name={s.icon} class="h-3.5 w-3.5" />}
-                  {s.name}
+                  {sk.icon && <Icon name={sk.icon} class="h-3.5 w-3.5" />}
+                  {sk.name}
                 </li>
               ))}
             </ul>

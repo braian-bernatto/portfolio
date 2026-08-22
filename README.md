@@ -7,12 +7,13 @@ modern React stack it's built with.
 ## Tech stack
 
 - **[Astro](https://astro.build)** — static output, zero-JS by default, React islands where interactivity matters
+- **Astro i18n** — bilingual: English at `/`, Spanish at `/es/`
 - **[React 19](https://react.dev)** — islands for the contact form (hydration on visible)
 - **TypeScript** — strict mode, fully-typed content
 - **[Tailwind CSS v4](https://tailwindcss.com)** — CSS-first config, custom design tokens
 - **[astro-icon](https://github.com/natemoo-re/astro-icon)** + Iconify (`simple-icons`, `lucide`) — inlined SVGs, no runtime
 - **React Hook Form + Zod** — typed, validated contact form
-- **Framer Motion** — micro-interactions
+- **Framer Motion (`motion`)** — micro-interactions
 
 ## Highlights
 
@@ -39,15 +40,18 @@ npm run dev      # http://localhost:4321
 
 ## Editing content
 
-All site content lives in a single typed module:
+All site content is fully-typed and locale-aware:
 
-```
-src/data/portfolio.ts
-```
+- `src/data/portfolio.ts` — profile, experience, skills, projects, education, stats.
+  Translatable strings use the `L(en, es)` helper; plain strings are identical in
+  both languages. Resolved via `getPortfolio(locale)`.
+- `src/i18n/ui.ts` — UI chrome per locale (nav labels, buttons, section headings,
+  contact form strings). Resolved via `getUi(locale)`.
 
-Update `profile`, `experience`, `skillGroups`, `projects`, `education`, `stats`
-there — the UI updates automatically. Icons are [Iconify](https://icon-sets.iconify.design)
-names (e.g. `simple-icons:react`, `lucide:code`).
+Edit either and **both** the homepage and the `/resume` route update automatically.
+
+Icons are [Iconify](https://icon-sets.iconify.design) names
+(e.g. `simple-icons:react`, `lucide:code`).
 
 The banking-platform placeholder visual is an inline SVG at
 `public/projects/banking-dashboard.svg` — swap it for a real screenshot when ready.
@@ -57,11 +61,13 @@ The banking-platform placeholder visual is an inline SVG at
 ```
 public/            favicon, robots.txt, project assets
 src/
-  components/      Nav, Hero, About, Experience, Skills, Projects, Contact, Footer
-  data/            portfolio.ts  (all content)
-  islands/         ContactForm.tsx  (React + RHF + Zod + Framer Motion)
-  layouts/         Layout.astro  (head, fonts, scroll-reveal, scroll-spy)
-  pages/           index.astro
+  components/      Home, Nav, Hero, About, Experience, Skills, Projects, Contact, Footer, ResumeView
+  data/            portfolio.ts  (locale-aware content)
+  i18n/            config.ts (locales) · ui.ts (UI strings per locale)
+  islands/         ContactForm.tsx  (React + RHF + Zod + motion)
+  layouts/         Layout.astro  (head, fonts, hreflang, scroll-reveal, scroll-spy)
+  pages/           index.astro (en) · resume.astro (en)
+    es/            index.astro (es) · resume.astro (es)
   styles/          global.css  (design tokens, glass/neu utilities)
 ```
 

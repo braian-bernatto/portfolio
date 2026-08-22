@@ -1,12 +1,21 @@
 ---
-import { profile, stats, socials } from '../data/portfolio';
+import { getPortfolio } from '../data/portfolio';
+import { getUi } from '../i18n/ui';
+import type { Locale } from '../i18n/config';
 import { Icon } from 'astro-icon/components';
 
+interface Props {
+  locale: Locale;
+}
+const { locale } = Astro.props;
+const { profile, stats, socials } = getPortfolio(locale);
+const t = getUi(locale);
+
 const orbit = [
-  { icon: 'simple-icons:react', label: 'React', pos: 'top-1 left-1/2 -translate-x-1/2' },
-  { icon: 'simple-icons:typescript', label: 'TypeScript', pos: 'top-1/2 right-1 translate-x-1/2 -translate-y-1/2' },
-  { icon: 'simple-icons:tailwindcss', label: 'Tailwind', pos: 'bottom-1 left-1/2 -translate-x-1/2' },
-  { icon: 'simple-icons:vitest', label: 'Vitest', pos: 'top-1/2 left-1 -translate-x-1/2 -translate-y-1/2' },
+  { icon: 'simple-icons:react', pos: 'top-1 left-1/2 -translate-x-1/2' },
+  { icon: 'simple-icons:typescript', pos: 'top-1/2 right-1 translate-x-1/2 -translate-y-1/2' },
+  { icon: 'simple-icons:tailwindcss', pos: 'bottom-1 left-1/2 -translate-x-1/2' },
+  { icon: 'simple-icons:vitest', pos: 'top-1/2 left-1 -translate-x-1/2 -translate-y-1/2' },
 ];
 ---
 
@@ -31,9 +40,7 @@ const orbit = [
       </p>
 
       <p class="mt-5 max-w-xl text-base leading-relaxed text-faint sm:text-lg">
-        Architecting and scaling high-performance React applications. Lead the
-        technical modernization of an enterprise banking platform across the
-        modern React ecosystem — TypeScript, TanStack, and a design-system mindset.
+        {t.hero.intro}
       </p>
 
       <div class="mt-8 flex flex-wrap items-center gap-3">
@@ -41,7 +48,7 @@ const orbit = [
           href="#projects"
           class="group inline-flex items-center gap-2 rounded-xl bg-brand px-5 py-3 text-sm font-semibold text-void transition-all duration-200 hover:bg-brand-bright hover:shadow-[0_0_32px_-6px] hover:shadow-brand/60"
         >
-          View my work
+          {t.actions.viewWork}
           <Icon name="lucide:arrow-down" class="h-4 w-4 transition-transform duration-300 group-hover:translate-y-0.5" />
         </a>
         <a
@@ -49,7 +56,7 @@ const orbit = [
           class="inline-flex items-center gap-2 rounded-xl glass px-5 py-3 text-sm font-semibold text-ink transition-all duration-200 hover:bg-white/10"
         >
           <Icon name="lucide:send" class="h-4 w-4 text-brand-bright" />
-          Get in touch
+          {t.actions.getInTouch}
         </a>
       </div>
 
@@ -75,21 +82,18 @@ const orbit = [
     <div class="hero-rise stagger relative mx-auto aspect-square w-full max-w-md">
       <div class="absolute inset-0 rounded-full bg-[radial-gradient(circle_at_50%_50%,color-mix(in_oklab,var(--color-brand)_16%,transparent),transparent_62%)]"></div>
 
-      <!-- rotating ring -->
       <div class="ring absolute inset-6 rounded-full border border-dashed border-brand/20"></div>
 
-      <!-- main medallion -->
       <div class="neu absolute inset-[18%] grid place-items-center rounded-full">
         <div class="glass-strong grid h-full w-full place-items-center rounded-full">
           <div class="text-center">
-            <p class="eyebrow text-[0.6rem]">Frontend</p>
+            <p class="eyebrow text-[0.6rem]">{t.hero.eyebrow}</p>
             <p class="font-display text-6xl font-extrabold tracking-tight text-gradient sm:text-7xl">BB</p>
-            <p class="mt-1 font-mono text-[0.65rem] text-faint">GMT-3 · Asunción</p>
+            <p class="mt-1 font-mono text-[0.65rem] text-faint">{profile.timezone} · {profile.city}</p>
           </div>
         </div>
       </div>
 
-      <!-- orbiting badges -->
       {
         orbit.map((o) => (
           <div class={`absolute ${o.pos} glass grid h-12 w-12 place-items-center rounded-xl text-brand-bright`}>

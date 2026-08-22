@@ -1,0 +1,12 @@
+---
+import Layout from '../../layouts/Layout.astro';
+import ResumeView from '../../components/ResumeView.astro';
+import { getPortfolio } from '../../data/portfolio';
+
+const { profile } = getPortfolio('es');
+const title = `${profile.name} — CV`;
+---
+
+<Layout locale="es" title={title} description={profile.summary}>
+  <ResumeView locale="es" />
+</Layout>

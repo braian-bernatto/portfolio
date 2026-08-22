@@ -1,27 +1,33 @@
 ---
-import { profile } from '../data/portfolio';
+import { getPortfolio } from '../data/portfolio';
+import { getUi } from '../i18n/ui';
+import type { Locale } from '../i18n/config';
 import { Icon } from 'astro-icon/components';
 import SectionHeading from './SectionHeading.astro';
 import ContactForm from '../islands/ContactForm.tsx';
 
+interface Props {
+  locale: Locale;
+}
+const { locale } = Astro.props;
+const { profile } = getPortfolio(locale);
+const t = getUi(locale);
+const s = t.sections.contact;
+const f = t.contact.form;
+
 const details = [
-  { label: 'Email', value: profile.email, href: `mailto:${profile.email}`, icon: 'lucide:mail' },
-  { label: 'Phone', value: profile.phone, href: `tel:${profile.phoneHref}`, icon: 'lucide:phone' },
-  { label: 'Location', value: `${profile.location} (${profile.timezone})`, href: undefined, icon: 'lucide:map-pin' },
-  { label: 'LinkedIn', value: 'linkedin.com/in/braian-bernatto', href: profile.linkedin, icon: 'simple-icons:linkedin' },
+  { label: t.contact.labels.email, value: profile.email, href: `mailto:${profile.email}`, icon: 'lucide:mail' },
+  { label: t.contact.labels.phone, value: profile.phone, href: `tel:${profile.phoneHref}`, icon: 'lucide:phone' },
+  { label: t.contact.labels.location, value: `${profile.location} (${profile.timezone})`, href: undefined, icon: 'lucide:map-pin' },
+  { label: t.contact.labels.linkedin, value: 'linkedin.com/in/braian-bernatto', href: profile.linkedin, icon: 'simple-icons:linkedin' },
 ];
 ---
 
 <section id="contact" class="scroll-mt-24 py-20 sm:py-28">
   <div class="u-container">
-    <SectionHeading
-      eyebrow="Contact"
-      title="Let's build something solid."
-      description="Open to senior and lead frontend roles. Reach out through the form or any of the channels below — I'll get back to you as soon as possible."
-    />
+    <SectionHeading eyebrow={s.eyebrow} title={s.title} description={s.description} />
 
     <div class="grid gap-4 lg:grid-cols-[0.9fr_1.1fr]">
-      <!-- Details -->
       <div class="reveal flex flex-col gap-3">
         {
           details.map((d) => {
@@ -60,9 +66,8 @@ const details = [
         </div>
       </div>
 
-      <!-- Form island -->
       <div class="reveal">
-        <ContactForm client:visible email={profile.email} />
+        <ContactForm client:visible email={profile.email} strings={f} />
       </div>
     </div>
   </div>

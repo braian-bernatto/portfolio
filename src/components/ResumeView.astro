@@ -1,0 +1,293 @@
+---
+import { getPortfolio } from '../data/portfolio';
+import { getUi } from '../i18n/ui';
+import type { Locale } from '../i18n/config';
+
+interface Props {
+  locale: Locale;
+}
+const { locale } = Astro.props;
+const { profile, experience, skillGroups, projects, education } = getPortfolio(locale);
+const t = getUi(locale);
+
+const featured = projects.find((p) => p.featured);
+const otherProjects = projects.filter((p) => !p.featured).slice(0, 2);
+const cleanUrl = (u: string) => u.replace(/^https?:\/\/(www\.)?/, '').replace(/\/$/, '');
+const contactLine = [
+  profile.email,
+  profile.phone,
+  `${profile.location} (${profile.timezone})`,
+  cleanUrl(profile.linkedin),
+  cleanUrl(profile.github),
+];
+const resume = t.resume;
+---
+
+<main class="resume-page">
+  <div class="no-print toolbar">
+    <a href={locale === 'es' ? '/es' : '/'} class="back">← {t.actions.backToSite}</a>
+    <button id="print-btn" type="button" class="print-btn">{t.actions.print}</button>
+  </div>
+
+  <article class="sheet">
+    <header class="head">
+      <h1>{profile.name}</h1>
+      <p class="role">{profile.role}</p>
+      <ul class="contact">
+        {contactLine.map((c) => <li>{c}</li>)}
+      </ul>
+    </header>
+
+    <section class="summary">
+      <p>{profile.summary}</p>
+    </section>
+
+    <section class="block">
+      <h2>{resume.experience}</h2>
+      {
+        experience.map((job) => (
+          <article class="entry">
+            <div class="entry-head">
+              <h3>{job.company}</h3>
+              <span class="dates">{job.start} – {job.end}</span>
+            </div>
+            <p class="job-role">{job.role}</p>
+            <ul class="bullets">
+              {job.highlights.map((h) => (
+                <li><strong>{h.title}</strong> — {h.body}</li>
+              ))}
+            </ul>
+            <p class="stack"><span>{resume.tech}:</span> {job.stack.join(' · ')}</p>
+          </article>
+        ))
+      }
+    </section>
+
+    <section class="block">
+      <h2>{resume.skills}</h2>
+      <dl class="skills">
+        {
+          skillGroups.map((g) => (
+            <div class="skill-row">
+              <dt>{g.title}</dt>
+              <dd>{g.skills.map((s) => s.name).join(' · ')}</dd>
+            </div>
+          ))
+        }
+      </dl>
+    </section>
+
+    <section class="block">
+      <h2>{resume.projects}</h2>
+      {
+        [featured, ...otherProjects].filter(Boolean).map((p) => (
+          <article class="entry">
+            <div class="entry-head">
+              <h3>{p!.name}</h3>
+              <span class="dates">{p!.date}</span>
+            </div>
+            <p class="job-role">{p!.role}{p!.company ? ` · ${p!.company}` : ''}</p>
+            <ul class="bullets">
+              {p!.highlights.map((h) => <li>{h}</li>)}
+            </ul>
+            <p class="stack"><span>{resume.tech}:</span> {p!.stack.join(' · ')}</p>
+          </article>
+        ))
+      }
+    </section>
+
+    <section class="block">
+      <h2>{resume.education}</h2>
+      <article class="entry">
+        <div class="entry-head">
+          <h3>{education.institution}</h3>
+          <span class="dates">{education.date}</span>
+        </div>
+        <p class="job-role">{education.degree}</p>
+      </article>
+    </section>
+  </article>
+</main>
+
+<style is:global>
+  .resume-page {
+    min-height: 100vh;
+    padding: 2rem 1rem 4rem;
+    background: var(--color-bg);
+  }
+  .toolbar {
+    max-width: 820px;
+    margin: 0 auto 1.25rem;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 1rem;
+  }
+  .back {
+    font-family: var(--font-mono);
+    font-size: 0.8rem;
+    color: var(--color-muted);
+    text-decoration: none;
+  }
+  .back:hover { color: var(--color-brand-bright); }
+  .print-btn {
+    font-family: var(--font-sans);
+    font-weight: 600;
+    font-size: 0.85rem;
+    color: var(--color-void);
+    background: var(--color-brand);
+    border: none;
+    border-radius: 0.6rem;
+    padding: 0.55rem 1.1rem;
+    cursor: pointer;
+    transition: background 0.2s ease;
+  }
+  .print-btn:hover { background: var(--color-brand-bright); }
+
+  .sheet {
+    max-width: 820px;
+    margin: 0 auto;
+    background: #fff;
+    color: #1a1d24;
+    padding: 3rem 2.75rem;
+    border-radius: 0.5rem;
+    box-shadow: 0 30px 80px -30px rgba(0, 0, 0, 0.7);
+    font-size: 0.92rem;
+    line-height: 1.5;
+  }
+  .sheet * { color: inherit; }
+
+  .head h1 {
+    font-family: var(--font-display);
+    font-size: 2.4rem;
+    font-weight: 800;
+    letter-spacing: -0.02em;
+    color: #0f766e;
+    margin: 0;
+  }
+  .head .role {
+    font-family: var(--font-sans);
+    font-weight: 600;
+    font-size: 1.05rem;
+    color: #334155;
+    margin: 0.15rem 0 0.85rem;
+  }
+  .contact {
+    list-style: none;
+    margin: 0 0 0.5rem;
+    padding: 0;
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.35rem 0.9rem;
+    font-family: var(--font-mono);
+    font-size: 0.72rem;
+    color: #64748b;
+  }
+  .contact li { position: relative; }
+  .contact li:not(:last-child)::after {
+    content: '·';
+    position: absolute;
+    right: -0.65rem;
+    color: #cbd5e1;
+  }
+
+  .summary {
+    margin: 0.5rem 0 1.5rem;
+    padding-bottom: 1.25rem;
+    border-bottom: 2px solid #0f766e;
+  }
+  .summary p { color: #334155; }
+
+  .block { margin-bottom: 1.4rem; }
+  .block h2 {
+    font-family: var(--font-display);
+    font-size: 0.78rem;
+    font-weight: 800;
+    letter-spacing: 0.18em;
+    text-transform: uppercase;
+    color: #0f766e;
+    margin: 0 0 0.75rem;
+    padding-bottom: 0.4rem;
+    border-bottom: 1px solid #e2e8f0;
+  }
+
+  .entry { margin-bottom: 0.9rem; break-inside: avoid; }
+  .entry-head {
+    display: flex;
+    justify-content: space-between;
+    align-items: baseline;
+    gap: 1rem;
+  }
+  .entry-head h3 {
+    font-family: var(--font-sans);
+    font-weight: 700;
+    font-size: 1rem;
+    color: #0f172a;
+    margin: 0;
+  }
+  .dates {
+    font-family: var(--font-mono);
+    font-size: 0.7rem;
+    color: #64748b;
+    white-space: nowrap;
+  }
+  .job-role {
+    font-size: 0.85rem;
+    font-weight: 600;
+    color: #0f766e;
+    margin: 0.1rem 0 0.4rem;
+  }
+  .bullets {
+    margin: 0 0 0.4rem;
+    padding-left: 1.1rem;
+  }
+  .bullets li {
+    color: #475569;
+    margin-bottom: 0.2rem;
+  }
+  .bullets strong { color: #0f172a; font-weight: 700; }
+  .stack {
+    font-family: var(--font-mono);
+    font-size: 0.7rem;
+    color: #64748b;
+    margin: 0.2rem 0 0;
+  }
+  .stack span { color: #94a3b8; }
+
+  .skills { margin: 0; }
+  .skill-row {
+    display: grid;
+    grid-template-columns: 11rem 1fr;
+    gap: 0.5rem;
+    padding: 0.3rem 0;
+    border-bottom: 1px solid #f1f5f9;
+  }
+  .skill-row:last-child { border-bottom: none; }
+  .skill-row dt {
+    font-family: var(--font-mono);
+    font-size: 0.72rem;
+    font-weight: 600;
+    color: #0f766e;
+  }
+  .skill-row dd {
+    margin: 0;
+    font-size: 0.82rem;
+    color: #475569;
+  }
+
+  @media print {
+    .resume-page { background: #fff; padding: 0; }
+    .sheet {
+      max-width: none;
+      box-shadow: none;
+      border-radius: 0;
+      padding: 0;
+    }
+    @page { margin: 1.4cm; }
+    .entry, .skill-row { break-inside: avoid; }
+  }
+</style>
+
+<script is:inline>
+  document.getElementById('print-btn')?.addEventListener('click', () => window.print());
+</script>

@@ -1,20 +1,24 @@
 ---
-import { projects, profile } from '../data/portfolio';
+import { getPortfolio } from '../data/portfolio';
+import { getUi } from '../i18n/ui';
+import type { Locale } from '../i18n/config';
 import { Icon } from 'astro-icon/components';
 import SectionHeading from './SectionHeading.astro';
 
+interface Props {
+  locale: Locale;
+}
+const { locale } = Astro.props;
+const { projects, profile } = getPortfolio(locale);
+const t = getUi(locale);
+const s = t.sections.projects;
 const [featured, ...rest] = projects;
 ---
 
 <section id="projects" class="scroll-mt-24 py-20 sm:py-28">
   <div class="u-container">
-    <SectionHeading
-      eyebrow="Projects"
-      title="Selected work."
-      description="Enterprise-grade builds and shipping products end-to-end — from government tooling to a banking platform."
-    />
+    <SectionHeading eyebrow={s.eyebrow} title={s.title} description={s.description} />
 
-    <!-- Featured -->
     <article
       class="reveal glass group relative grid gap-0 overflow-hidden rounded-3xl lg:grid-cols-2"
       data-delay="0"
@@ -30,7 +34,7 @@ const [featured, ...rest] = projects;
         <div class="absolute inset-0 bg-gradient-to-t from-surface via-surface/20 to-transparent lg:bg-gradient-to-r"></div>
         <span class="absolute left-4 top-4 inline-flex items-center gap-1.5 rounded-full bg-void/70 px-3 py-1.5 text-[0.65rem] font-semibold text-brand-bright backdrop-blur">
           <Icon name="lucide:star" class="h-3 w-3" />
-          Featured
+          {t.misc.featured}
         </span>
       </div>
 
@@ -56,12 +60,11 @@ const [featured, ...rest] = projects;
         </ul>
 
         <ul class="mt-6 flex flex-wrap gap-2">
-          {featured.stack.map((t) => <li class="chip">{t}</li>)}
+          {featured.stack.map((tk) => <li class="chip">{tk}</li>)}
         </ul>
       </div>
     </article>
 
-    <!-- Rest -->
     <div class="mt-4 grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
       {
         rest.map((p, i) => (
@@ -90,8 +93,8 @@ const [featured, ...rest] = projects;
             </ul>
 
             <ul class="mt-4 flex flex-wrap gap-1.5">
-              {p.stack.map((t) => (
-                <li class="chip py-1 text-[0.7rem]">{t}</li>
+              {p.stack.map((tk) => (
+                <li class="chip py-1 text-[0.7rem]">{tk}</li>
               ))}
             </ul>
 
@@ -102,7 +105,7 @@ const [featured, ...rest] = projects;
                 rel="noopener"
                 class="mt-5 inline-flex items-center gap-1.5 text-sm font-semibold text-brand-bright link-underline"
               >
-                Visit site
+                {t.actions.visitSite}
                 <Icon name="lucide:arrow-up-right" class="h-4 w-4" />
               </a>
             )}
@@ -111,11 +114,10 @@ const [featured, ...rest] = projects;
       }
     </div>
 
-    <!-- CTA strip -->
     <div class="reveal mt-4 flex flex-col items-center justify-between gap-4 rounded-2xl glass p-6 text-center sm:flex-row sm:text-left" data-delay="120">
       <div>
-        <h3 class="font-display text-lg font-bold text-ink">More on GitHub</h3>
-        <p class="text-sm text-muted">Browse the source behind these builds.</p>
+        <h3 class="font-display text-lg font-bold text-ink">{t.actions.moreOnGithub}</h3>
+        <p class="text-sm text-muted">{profile.github.replace('https://github.com/', 'github.com/')}</p>
       </div>
       <a
         href={profile.github}

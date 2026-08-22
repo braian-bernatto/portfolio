@@ -1,12 +1,26 @@
 ---
-import { profile, nav } from '../data/portfolio';
+import { getPortfolio } from '../data/portfolio';
+import { getUi } from '../i18n/ui';
+import { languageLabels } from '../i18n/config';
+import type { Locale } from '../i18n/config';
 import { Icon } from 'astro-icon/components';
+
+interface Props {
+  locale: Locale;
+}
+const { locale } = Astro.props;
+const { profile } = getPortfolio(locale);
+const t = getUi(locale);
+
+const resumeHref = locale === 'es' ? '/es/resume' : '/resume';
+const path = Astro.url.pathname.replace(/\/+$/, '') || '/';
+const isEs = path === '/es' || path.startsWith('/es/');
+const altLocale: Locale = locale === 'es' ? 'en' : 'es';
+const altPath = isEs ? path.replace(/^\/es/, '') || '/' : `/es${path === '/' ? '' : path}`;
+const altHref = altPath === '/' ? '/' : altPath;
 ---
 
-<header
-  id="top"
-  class="fixed inset-x-0 top-0 z-50 flex justify-center px-4 pt-3 sm:pt-4"
->
+<header class="fixed inset-x-0 top-0 z-50 flex justify-center px-4 pt-3 sm:pt-4">
   <nav class="glass u-container flex items-center justify-between gap-3 rounded-2xl px-3 py-2.5 sm:px-5">
     <a href="#top" class="group flex items-center gap-2.5" aria-label={profile.name}>
       <span class="grid h-9 w-9 place-items-center rounded-xl bg-brand/15 text-brand-bright ring-1 ring-brand/30 transition-transform duration-300 group-hover:scale-105">
@@ -19,7 +33,7 @@ import { Icon } from 'astro-icon/components';
 
     <ul class="hidden items-center gap-1 md:flex">
       {
-        nav.map((item) => (
+        t.nav.map((item) => (
           <li>
             <a
               href={item.href}
@@ -36,11 +50,20 @@ import { Icon } from 'astro-icon/components';
 
     <div class="flex items-center gap-2">
       <a
-        href="/resume"
+        href={altHref}
+        class="inline-flex items-center gap-1.5 rounded-xl glass px-3 py-2 text-sm font-semibold text-muted transition-all duration-200 hover:text-brand-bright"
+        aria-label={languageLabels[altLocale]}
+        title={languageLabels[altLocale]}
+      >
+        <Icon name="lucide:languages" class="h-4 w-4" />
+        <span class="hidden sm:inline">{languageLabels[altLocale]}</span>
+      </a>
+      <a
+        href={resumeHref}
         class="hidden items-center gap-1.5 rounded-xl border border-brand/40 bg-brand/10 px-3.5 py-2 text-sm font-semibold text-brand-bright transition-all duration-200 hover:bg-brand/20 hover:shadow-[0_0_24px_-6px] hover:shadow-brand/50 sm:flex"
       >
         <Icon name="lucide:file-text" class="h-4 w-4" />
-        Resume
+        {t.actions.resume}
       </a>
       <button
         id="menu-toggle"
@@ -56,16 +79,12 @@ import { Icon } from 'astro-icon/components';
   </nav>
 </header>
 
-<div
-  id="mobile-menu"
-  class="fixed inset-0 z-40 hidden md:hidden"
-  data-open="false"
->
+<div id="mobile-menu" class="fixed inset-0 z-40 hidden md:hidden" data-open="false">
   <div class="absolute inset-0 bg-void/70 backdrop-blur-sm" data-menu-close></div>
   <div class="glass-strong absolute inset-x-3 top-20 rounded-2xl p-3">
     <ul class="flex flex-col">
       {
-        nav.map((item) => (
+        t.nav.map((item) => (
           <li>
             <a
               href={item.href}
@@ -80,11 +99,19 @@ import { Icon } from 'astro-icon/components';
       }
       <li class="mt-2 border-t border-white/10 pt-2">
         <a
-          href="/resume"
+          href={altHref}
           data-menu-close
           class="mb-2 flex items-center justify-between rounded-xl px-4 py-3 text-base font-medium text-muted transition-colors hover:bg-white/5 hover:text-ink"
         >
-          Printable resume
+          {languageLabels[altLocale]}
+          <Icon name="lucide:languages" class="h-4 w-4 opacity-70" />
+        </a>
+        <a
+          href={resumeHref}
+          data-menu-close
+          class="mb-2 flex items-center justify-between rounded-xl px-4 py-3 text-base font-medium text-muted transition-colors hover:bg-white/5 hover:text-ink"
+        >
+          {t.actions.resume}
           <Icon name="lucide:file-text" class="h-4 w-4 opacity-70" />
         </a>
         <a
@@ -92,7 +119,7 @@ import { Icon } from 'astro-icon/components';
           data-menu-close
           class="flex items-center justify-between rounded-xl bg-brand/10 px-4 py-3 text-base font-semibold text-brand-bright"
         >
-          Get in touch
+          {t.actions.getInTouch}
           <Icon name="lucide:send" class="h-4 w-4" />
         </a>
       </li>
