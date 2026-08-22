@@ -1,0 +1,4 @@
+User-agent: *
+Allow: /
+
+Sitemap: https://braianbernatto.com/sitemap-index.xml

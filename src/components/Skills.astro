@@ -1,0 +1,43 @@
+---
+import { skillGroups } from '../data/portfolio';
+import { Icon } from 'astro-icon/components';
+import SectionHeading from './SectionHeading.astro';
+---
+
+<section id="skills" class="scroll-mt-24 py-20 sm:py-28">
+  <div class="u-container">
+    <SectionHeading
+      eyebrow="Skills"
+      title="The toolkit behind the work."
+      description="A senior-frontend stack centered on the modern React ecosystem, with tooling, observability, and docs to keep teams moving."
+    />
+
+    <div class="grid gap-4 sm:grid-cols-2 lg:grid-cols-4">
+      {
+        skillGroups.map((group, gi) => (
+          <article
+            class="reveal glass group flex flex-col rounded-2xl p-5 transition-transform duration-300 hover:-translate-y-1"
+            data-delay={(gi % 4) * 70}
+          >
+            <div class="mb-4 flex items-center gap-3">
+              <span class="grid h-10 w-10 place-items-center rounded-xl bg-brand/12 text-brand-bright ring-1 ring-brand/25 transition-transform duration-300 group-hover:scale-110">
+                <Icon name={group.icon} class="h-5 w-5" />
+              </span>
+              <h3 class="font-display text-sm font-bold tracking-tight text-ink">
+                {group.title}
+              </h3>
+            </div>
+            <ul class="flex flex-wrap gap-1.5">
+              {group.skills.map((s) => (
+                <li class="chip">
+                  {s.icon && <Icon name={s.icon} class="h-3.5 w-3.5" />}
+                  {s.name}
+                </li>
+              ))}
+            </ul>
+          </article>
+        ))
+      }
+    </div>
+  </div>
+</section>

@@ -1,0 +1,146 @@
+---
+import { profile, stats, socials } from '../data/portfolio';
+import { Icon } from 'astro-icon/components';
+
+const orbit = [
+  { icon: 'simple-icons:react', label: 'React', pos: 'top-1 left-1/2 -translate-x-1/2' },
+  { icon: 'simple-icons:typescript', label: 'TypeScript', pos: 'top-1/2 right-1 translate-x-1/2 -translate-y-1/2' },
+  { icon: 'simple-icons:tailwindcss', label: 'Tailwind', pos: 'bottom-1 left-1/2 -translate-x-1/2' },
+  { icon: 'simple-icons:vitest', label: 'Vitest', pos: 'top-1/2 left-1 -translate-x-1/2 -translate-y-1/2' },
+];
+---
+
+<section id="hero" class="relative min-h-screen pt-28 sm:pt-32">
+  <div class="u-container grid items-center gap-14 py-12 lg:grid-cols-[1.15fr_0.85fr] lg:gap-8 lg:py-20">
+    <!-- Copy -->
+    <div class="hero-rise stagger max-w-2xl">
+      <p class="eyebrow mb-5 inline-flex items-center gap-2">
+        <span class="relative flex h-2 w-2">
+          <span class="absolute inline-flex h-full w-full animate-ping rounded-full bg-brand-bright opacity-75"></span>
+          <span class="relative inline-flex h-2 w-2 rounded-full bg-brand-bright"></span>
+        </span>
+        {profile.availability}
+      </p>
+
+      <h1 class="font-display text-[2.6rem] font-extrabold leading-[0.95] tracking-tight text-ink sm:text-6xl lg:text-7xl">
+        Braian<br />Bernatto<span class="text-brand-bright">.</span>
+      </h1>
+
+      <p class="mt-5 font-display text-xl font-semibold text-muted sm:text-2xl">
+        {profile.role}
+      </p>
+
+      <p class="mt-5 max-w-xl text-base leading-relaxed text-faint sm:text-lg">
+        Architecting and scaling high-performance React applications. Lead the
+        technical modernization of an enterprise banking platform across the
+        modern React ecosystem — TypeScript, TanStack, and a design-system mindset.
+      </p>
+
+      <div class="mt-8 flex flex-wrap items-center gap-3">
+        <a
+          href="#projects"
+          class="group inline-flex items-center gap-2 rounded-xl bg-brand px-5 py-3 text-sm font-semibold text-void transition-all duration-200 hover:bg-brand-bright hover:shadow-[0_0_32px_-6px] hover:shadow-brand/60"
+        >
+          View my work
+          <Icon name="lucide:arrow-down" class="h-4 w-4 transition-transform duration-300 group-hover:translate-y-0.5" />
+        </a>
+        <a
+          href="#contact"
+          class="inline-flex items-center gap-2 rounded-xl glass px-5 py-3 text-sm font-semibold text-ink transition-all duration-200 hover:bg-white/10"
+        >
+          <Icon name="lucide:send" class="h-4 w-4 text-brand-bright" />
+          Get in touch
+        </a>
+      </div>
+
+      <div class="mt-8 flex items-center gap-2.5">
+        {
+          socials.map((s) => (
+            <a
+              href={s.href}
+              target={s.href.startsWith('http') ? '_blank' : undefined}
+              rel="noopener"
+              aria-label={s.label}
+              title={s.label}
+              class="grid h-10 w-10 place-items-center rounded-xl glass text-muted transition-all duration-200 hover:text-brand-bright hover:-translate-y-0.5"
+            >
+              <Icon name={s.icon} class="h-[18px] w-[18px]" />
+            </a>
+          ))
+        }
+      </div>
+    </div>
+
+    <!-- Medallion centerpiece -->
+    <div class="hero-rise stagger relative mx-auto aspect-square w-full max-w-md">
+      <div class="absolute inset-0 rounded-full bg-[radial-gradient(circle_at_50%_50%,color-mix(in_oklab,var(--color-brand)_16%,transparent),transparent_62%)]"></div>
+
+      <!-- rotating ring -->
+      <div class="ring absolute inset-6 rounded-full border border-dashed border-brand/20"></div>
+
+      <!-- main medallion -->
+      <div class="neu absolute inset-[18%] grid place-items-center rounded-full">
+        <div class="glass-strong grid h-full w-full place-items-center rounded-full">
+          <div class="text-center">
+            <p class="eyebrow text-[0.6rem]">Frontend</p>
+            <p class="font-display text-6xl font-extrabold tracking-tight text-gradient sm:text-7xl">BB</p>
+            <p class="mt-1 font-mono text-[0.65rem] text-faint">GMT-3 · Asunción</p>
+          </div>
+        </div>
+      </div>
+
+      <!-- orbiting badges -->
+      {
+        orbit.map((o) => (
+          <div class={`absolute ${o.pos} glass grid h-12 w-12 place-items-center rounded-xl text-brand-bright`}>
+            <Icon name={o.icon} class="h-5 w-5" />
+          </div>
+        ))
+      }
+    </div>
+  </div>
+
+  <!-- Stats -->
+  <div class="u-container hero-rise stagger pb-14">
+    <dl class="glass grid grid-cols-2 gap-px overflow-hidden rounded-2xl sm:grid-cols-4">
+      {
+        stats.map((s) => (
+          <div class="bg-white/[0.02] p-5 text-center sm:p-6">
+            <dt class="font-display text-3xl font-extrabold text-gradient sm:text-4xl">{s.value}</dt>
+            <dd class="mt-1 text-xs text-muted sm:text-sm">{s.label}</dd>
+          </div>
+        ))
+      }
+    </dl>
+  </div>
+</section>
+
+<style>
+  .hero-rise > * {
+    opacity: 0;
+    transform: translateY(22px);
+    animation: heroRise 0.8s var(--ease-out-soft) forwards;
+  }
+  .stagger > *:nth-child(1) { animation-delay: 0.05s; }
+  .stagger > *:nth-child(2) { animation-delay: 0.12s; }
+  .stagger > *:nth-child(3) { animation-delay: 0.19s; }
+  .stagger > *:nth-child(4) { animation-delay: 0.26s; }
+  .stagger > *:nth-child(5) { animation-delay: 0.33s; }
+  .stagger > *:nth-child(6) { animation-delay: 0.40s; }
+
+  @keyframes heroRise {
+    to { opacity: 1; transform: none; }
+  }
+
+  .ring {
+    animation: spin 28s linear infinite;
+  }
+  @keyframes spin {
+    to { transform: rotate(360deg); }
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    .hero-rise > * { opacity: 1; transform: none; animation: none; }
+    .ring { animation: none; }
+  }
+</style>

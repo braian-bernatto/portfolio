@@ -1,0 +1,240 @@
+@import 'tailwindcss';
+
+/* ----------------------------------------------------------------------------
+   Design tokens
+---------------------------------------------------------------------------- */
+@theme {
+  /* Surfaces */
+  --color-void: #06070a;
+  --color-bg: #090b0f;
+  --color-surface: #0f1218;
+  --color-surface-2: #141821;
+
+  /* Ink */
+  --color-ink: #e8eaf0;
+  --color-muted: #98a0ae;
+  --color-faint: #5b6373;
+
+  /* Brand — refined teal (echoes the original palette) */
+  --color-brand: #2dd4bf;
+  --color-brand-bright: #5eead4;
+  --color-brand-deep: #0f766e;
+  --color-accent: #60a5fa;
+
+  /* Fonts */
+  --font-display: 'Bricolage Grotesque', 'Manrope', sans-serif;
+  --font-sans: 'Manrope', system-ui, sans-serif;
+  --font-mono: 'JetBrains Mono', ui-monospace, monospace;
+
+  /* Radius */
+  --radius-xl: 1.5rem;
+  --radius-2xl: 2rem;
+  --radius-3xl: 2.75rem;
+
+  /* Easing */
+  --ease-out-soft: cubic-bezier(0.22, 1, 0.36, 1);
+}
+
+/* ----------------------------------------------------------------------------
+   Base
+---------------------------------------------------------------------------- */
+@layer base {
+  html {
+    scroll-behavior: smooth;
+    -webkit-text-size-adjust: 100%;
+  }
+
+  body {
+    background-color: var(--color-bg);
+    color: var(--color-ink);
+    font-family: var(--font-sans);
+    font-feature-settings: 'cv01', 'ss01';
+    -webkit-font-smoothing: antialiased;
+    text-rendering: optimizeLegibility;
+    overflow-x: hidden;
+  }
+
+  /* Atmospheric backdrop: layered radial glows + grain + grid */
+  body::before {
+    content: '';
+    position: fixed;
+    inset: 0;
+    z-index: -2;
+    background:
+      radial-gradient(60rem 60rem at 78% -10%, color-mix(in oklab, var(--color-brand) 14%, transparent), transparent 60%),
+      radial-gradient(48rem 48rem at 8% 8%, color-mix(in oklab, var(--color-accent) 9%, transparent), transparent 55%),
+      radial-gradient(70rem 70rem at 50% 120%, color-mix(in oklab, var(--color-brand-deep) 16%, transparent), transparent 60%);
+  }
+
+  body::after {
+    content: '';
+    position: fixed;
+    inset: 0;
+    z-index: -1;
+    pointer-events: none;
+    opacity: 0.035;
+    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='200' height='200'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.85' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
+  }
+
+  ::selection {
+    background: color-mix(in oklab, var(--color-brand) 32%, transparent);
+    color: #fff;
+  }
+
+  h1, h2, h3, h4 {
+    font-family: var(--font-display);
+    font-weight: 800;
+    letter-spacing: -0.02em;
+    line-height: 1.02;
+  }
+
+  a { color: inherit; }
+
+  :focus-visible {
+    outline: 2px solid var(--color-brand-bright);
+    outline-offset: 3px;
+    border-radius: 4px;
+  }
+}
+
+/* ----------------------------------------------------------------------------
+   Utilities / components
+---------------------------------------------------------------------------- */
+@layer components {
+  .u-container {
+    width: 100%;
+    max-width: 72rem;
+    margin-inline: auto;
+    padding-inline: 1.5rem;
+  }
+
+  /* Glassmorphism */
+  .glass {
+    background: linear-gradient(
+      180deg,
+      color-mix(in oklab, white 6%, transparent),
+      color-mix(in oklab, white 2%, transparent)
+    );
+    backdrop-filter: blur(16px) saturate(140%);
+    border: 1px solid color-mix(in oklab, white 9%, transparent);
+    box-shadow:
+      inset 0 1px 0 color-mix(in oklab, white 8%, transparent),
+      0 24px 60px -28px rgba(0, 0, 0, 0.8);
+  }
+
+  .glass-strong {
+    background: color-mix(in oklab, var(--color-surface) 72%, transparent);
+    backdrop-filter: blur(20px) saturate(150%);
+    border: 1px solid color-mix(in oklab, white 8%, transparent);
+    box-shadow: inset 0 1px 0 color-mix(in oklab, white 6%, transparent);
+  }
+
+  /* Neumorphism (dark) */
+  .neu {
+    background: var(--color-surface);
+    border: 1px solid color-mix(in oklab, white 4%, transparent);
+    box-shadow:
+      -10px -10px 24px color-mix(in oklab, white 3%, transparent),
+      12px 12px 30px rgba(0, 0, 0, 0.55),
+      inset 0 1px 0 color-mix(in oklab, white 4%, transparent);
+  }
+
+  .neu-inset {
+    background: var(--color-bg);
+    box-shadow:
+      inset 5px 5px 12px rgba(0, 0, 0, 0.6),
+      inset -5px -5px 12px color-mix(in oklab, white 3%, transparent);
+  }
+
+  .hairline {
+    border: 1px solid color-mix(in oklab, white 8%, transparent);
+  }
+
+  .text-gradient {
+    background: linear-gradient(100deg, var(--color-brand-bright), var(--color-brand) 55%, var(--color-accent));
+    -webkit-background-clip: text;
+    background-clip: text;
+    color: transparent;
+  }
+
+  .eyebrow {
+    font-family: var(--font-mono);
+    font-size: 0.72rem;
+    letter-spacing: 0.28em;
+    text-transform: uppercase;
+    color: var(--color-brand-bright);
+  }
+
+  .chip {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.5rem;
+    padding: 0.42rem 0.85rem;
+    border-radius: 999px;
+    font-family: var(--font-mono);
+    font-size: 0.8rem;
+    color: var(--color-muted);
+    background: color-mix(in oklab, white 3%, transparent);
+    border: 1px solid color-mix(in oklab, white 7%, transparent);
+    transition: transform 0.25s var(--ease-out-soft), color 0.25s ease, border-color 0.25s ease, background 0.25s ease;
+  }
+
+  .chip:hover {
+    color: var(--color-ink);
+    border-color: color-mix(in oklab, var(--color-brand) 45%, transparent);
+    background: color-mix(in oklab, var(--color-brand) 9%, transparent);
+    transform: translateY(-2px);
+  }
+
+  .link-underline {
+    background-image: linear-gradient(currentColor, currentColor);
+    background-position: 0 100%;
+    background-repeat: no-repeat;
+    background-size: 0% 1.5px;
+    transition: background-size 0.3s var(--ease-out-soft);
+  }
+
+  .link-underline:hover {
+    background-size: 100% 1.5px;
+  }
+}
+
+/* ----------------------------------------------------------------------------
+   Scroll reveal (IntersectionObserver)
+---------------------------------------------------------------------------- */
+.reveal {
+  opacity: 0;
+  transform: translateY(26px);
+  transition: opacity 0.7s var(--ease-out-soft), transform 0.7s var(--ease-out-soft);
+  will-change: opacity, transform;
+}
+
+.reveal.is-in {
+  opacity: 1;
+  transform: none;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  html { scroll-behavior: auto; }
+  .reveal { opacity: 1 !important; transform: none !important; transition: none !important; }
+}
+
+/* Custom scrollbar */
+::-webkit-scrollbar { width: 10px; height: 10px; }
+::-webkit-scrollbar-track { background: transparent; }
+::-webkit-scrollbar-thumb {
+  background: color-mix(in oklab, var(--color-brand) 40%, transparent);
+  border-radius: 999px;
+  border: 2px solid transparent;
+  background-clip: content-box;
+}
+::-webkit-scrollbar-thumb:hover { background: var(--color-brand); background-clip: content-box; }
+
+/* Print: drop dark atmosphere / grain so any page prints clean */
+@media print {
+  body { background: #fff !important; color: #000 !important; }
+  body::before,
+  body::after { display: none !important; }
+  .no-print { display: none !important; }
+  html { scroll-behavior: auto; }
+}

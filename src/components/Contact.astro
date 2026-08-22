@@ -1,0 +1,69 @@
+---
+import { profile } from '../data/portfolio';
+import { Icon } from 'astro-icon/components';
+import SectionHeading from './SectionHeading.astro';
+import ContactForm from '../islands/ContactForm.tsx';
+
+const details = [
+  { label: 'Email', value: profile.email, href: `mailto:${profile.email}`, icon: 'lucide:mail' },
+  { label: 'Phone', value: profile.phone, href: `tel:${profile.phoneHref}`, icon: 'lucide:phone' },
+  { label: 'Location', value: `${profile.location} (${profile.timezone})`, href: undefined, icon: 'lucide:map-pin' },
+  { label: 'LinkedIn', value: 'linkedin.com/in/braian-bernatto', href: profile.linkedin, icon: 'simple-icons:linkedin' },
+];
+---
+
+<section id="contact" class="scroll-mt-24 py-20 sm:py-28">
+  <div class="u-container">
+    <SectionHeading
+      eyebrow="Contact"
+      title="Let's build something solid."
+      description="Open to senior and lead frontend roles. Reach out through the form or any of the channels below — I'll get back to you as soon as possible."
+    />
+
+    <div class="grid gap-4 lg:grid-cols-[0.9fr_1.1fr]">
+      <!-- Details -->
+      <div class="reveal flex flex-col gap-3">
+        {
+          details.map((d) => {
+            const content = (
+              <div
+                class:list={[
+                  'glass flex items-center gap-4 rounded-2xl p-5',
+                  d.href && 'transition-colors duration-200 hover:border-brand/30 hover:bg-white/[0.02]',
+                ]}
+              >
+                <span class="grid h-11 w-11 shrink-0 place-items-center rounded-xl bg-brand/12 text-brand-bright ring-1 ring-brand/25">
+                  <Icon name={d.icon} class="h-5 w-5" />
+                </span>
+                <div class="min-w-0">
+                  <p class="font-mono text-[0.65rem] uppercase tracking-widest text-faint">{d.label}</p>
+                  <p class="truncate text-sm font-semibold text-ink">{d.value}</p>
+                </div>
+              </div>
+            );
+            return d.href ? (
+              <a href={d.href} target={d.href.startsWith('http') ? '_blank' : undefined} rel="noopener" class="block">
+                {content}
+              </a>
+            ) : (
+              <div>{content}</div>
+            );
+          })
+        }
+
+        <div class="glass mt-auto flex items-center gap-3 rounded-2xl p-5">
+          <span class="relative flex h-2.5 w-2.5">
+            <span class="absolute inline-flex h-full w-full animate-ping rounded-full bg-brand-bright opacity-75"></span>
+            <span class="relative inline-flex h-2.5 w-2.5 rounded-full bg-brand-bright"></span>
+          </span>
+          <p class="text-sm text-muted">{profile.availability}</p>
+        </div>
+      </div>
+
+      <!-- Form island -->
+      <div class="reveal">
+        <ContactForm client:visible email={profile.email} />
+      </div>
+    </div>
+  </div>
+</section>

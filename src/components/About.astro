@@ -1,0 +1,50 @@
+---
+import { profile } from '../data/portfolio';
+import { Icon } from 'astro-icon/components';
+import SectionHeading from './SectionHeading.astro';
+
+const pillars = [
+  {
+    icon: 'lucide:layers',
+    title: 'Architecture & Modernization',
+    body: 'Migrating teams onto modern React ecosystems — TypeScript, TanStack, and design-system thinking — to cut load times and stabilize server state at scale.',
+  },
+  {
+    icon: 'lucide:book-open-text',
+    title: 'Developer Experience',
+    body: 'A “Docs as Code” discipline: clear architectural guidelines, comprehensive documentation, and strict quality standards that drastically accelerate onboarding.',
+  },
+  {
+    icon: 'lucide:shield-check',
+    title: 'Quality Engineering',
+    body: 'Comprehensive testing standards and ESLint guardrails baked into CI — raising deployment reliability and shipping with confidence.',
+  },
+];
+---
+
+<section id="about" class="scroll-mt-24 py-20 sm:py-28">
+  <div class="u-container">
+    <SectionHeading
+      eyebrow="About"
+      title="Bridging product vision and scalable execution."
+      description={profile.summary}
+    />
+
+    <div class="grid gap-4 sm:grid-cols-3">
+      {
+        pillars.map((p, i) => (
+          <article
+            class="reveal neu group relative flex flex-col gap-3 rounded-2xl p-6"
+            data-delay={i * 90}
+          >
+            <span class="grid h-11 w-11 place-items-center rounded-xl bg-brand/12 text-brand-bright ring-1 ring-brand/25 transition-transform duration-300 group-hover:scale-110">
+              <Icon name={p.icon} class="h-5 w-5" />
+            </span>
+            <h3 class="font-display text-lg font-bold text-ink">{p.title}</h3>
+            <p class="text-sm leading-relaxed text-muted">{p.body}</p>
+          </article>
+        ))
+      }
+    </div>
+  </div>
+</section>
