@@ -1,4 +1,4 @@
 User-agent: *
 Allow: /
 
-Sitemap: https://braianbernatto.com/sitemap-index.xml
+Sitemap: https://bernatto.com/sitemap-index.xml
