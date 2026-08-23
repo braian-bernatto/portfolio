@@ -72,6 +72,7 @@ export interface ProjectEntry {
   highlights: string[];
   stack: string[];
   image?: string;
+  gallery?: string[];
   featured?: boolean;
   placeholder?: 'banking';
 }
@@ -324,10 +325,11 @@ const rawProjects: {
   url?: string;
   summary: Loc<string>;
   highlights: (string | Loc<string>)[];
-  stack: string[];
-  image?: string;
-  featured?: boolean;
-  placeholder?: 'banking';
+   stack: string[];
+   image?: string;
+   gallery?: string[];
+   featured?: boolean;
+   placeholder?: 'banking';
 }[] = [
   {
     name: L('Enterprise Banking Platform', 'Plataforma Bancaria Empresarial'),
@@ -361,6 +363,41 @@ const rawProjects: {
       L('Integrated Google Maps API for location and a custom HTML5 theme.', 'Integré la API de Google Maps para ubicación y un theme HTML5 personalizado.'),
     ],
     stack: ['Next.js', 'Google Maps API', 'Custom HTML5 Theme', 'next-translate'],
+  },
+  {
+    name: L('Eagle Eye Admin', 'Panel de Administración Eagle Eye'),
+    role: 'Full-Stack Developer',
+    date: L('2023 — Present', '2023 — Presente'),
+    summary: L(
+      "Full-stack admin CMS powering Eagle Eye's website — managing players, coaching staff, teams and match statistics, feeding the public site through revalidation webhooks.",
+      'CMS administrativo full-stack que alimenta el sitio web de Eagle Eye — gestión de jugadores, cuerpo técnico, equipos y estadísticas de partidos, sincronizando el sitio público mediante webhooks de revalidación.'
+    ),
+    highlights: [
+      L(
+        'In-browser AI image pipeline: upload → crop → background removal → transparent PNG.',
+        'Pipeline de imágenes con IA en el navegador: subida → recorte → remoción de fondo → PNG transparente.'
+      ),
+      L(
+        'Full CRUD dashboards for roster and match statistics, built on TanStack Table.',
+        'Dashboards CRUD completos para plantilla y estadísticas, construidos sobre TanStack Table.'
+      ),
+      L(
+        'Secure Google OAuth authentication over a relational Prisma/PostgreSQL schema.',
+        'Autenticación segura con Google OAuth sobre un esquema relacional en Prisma/PostgreSQL.'
+      ),
+    ],
+    stack: ['Next.js 14', 'TypeScript', 'Prisma + PostgreSQL', 'NextAuth.js', 'shadcn/ui', 'TanStack Table'],
+    image: '/projects/eagleeye/02-dashboard-light.png',
+    gallery: [
+      '/projects/eagleeye/02-dashboard-light.png',
+      '/projects/eagleeye/03-jugadores-light.png',
+      '/projects/eagleeye/06-player-form-dark.png',
+      '/projects/eagleeye/07-crop-modal-dark.png',
+      '/projects/eagleeye/05-dashboard-dark.png',
+      '/projects/eagleeye/04-jugadores-dark.png',
+      '/projects/eagleeye/01-login-light.png',
+    ],
+    featured: true,
   },
   {
     name: L('Public Tenders Contracts', 'Contratos de Licitación Pública'),
@@ -441,6 +478,7 @@ export function getPortfolio(locale: Locale) {
       highlights: p.highlights.map((h) => r(h, locale)),
       stack: p.stack,
       image: p.image,
+      gallery: p.gallery,
       featured: p.featured,
       placeholder: p.placeholder,
     })),

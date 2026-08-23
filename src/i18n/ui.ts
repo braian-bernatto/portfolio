@@ -42,7 +42,7 @@ export interface Ui {
     form: ContactFormStrings;
   };
   footer: { navigate: string; education: string; builtWith: string };
-  misc: { current: string; featured: string };
+  misc: { current: string; featured: string; screenshot: string; viewGallery: string; close: string; prev: string; next: string };
   hero: { eyebrow: string; intro: string };
   resume: {
     title: string;
@@ -141,7 +141,7 @@ const en: Ui = {
     },
   },
   footer: { navigate: 'Navigate', education: 'Education', builtWith: 'Built with Astro, React & Tailwind.' },
-  misc: { current: 'Current', featured: 'Featured' },
+  misc: { current: 'Current', featured: 'Featured', screenshot: 'Screenshot', viewGallery: 'Open screenshots gallery', close: 'Close', prev: 'Previous image', next: 'Next image' },
   hero: {
     eyebrow: 'Frontend',
     intro:
@@ -244,7 +244,7 @@ const es: Ui = {
     },
   },
   footer: { navigate: 'Navegación', education: 'Educación', builtWith: 'Hecho con Astro, React y Tailwind.' },
-  misc: { current: 'Actual', featured: 'Destacado' },
+  misc: { current: 'Actual', featured: 'Destacado', screenshot: 'Captura', viewGallery: 'Abrir galería de capturas', close: 'Cerrar', prev: 'Imagen anterior', next: 'Imagen siguiente' },
   hero: {
     eyebrow: 'Frontend',
     intro:
